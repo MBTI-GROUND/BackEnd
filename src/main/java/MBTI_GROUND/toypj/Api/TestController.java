@@ -1,18 +1,21 @@
 package MBTI_GROUND.toypj.Api;
 
-import org.springframework.beans.factory.annotation.Value;
+import MBTI_GROUND.toypj.Auth.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class TestController {
 
-  @Value("${jwt.secret}")
-  private String key;
+  private final TokenProvider tokenProvider;
 
-  @GetMapping("/test")
-  public String test(){
-    return key;
+
+
+  @GetMapping("/tokenTest")
+  public String token(){
+    return tokenProvider.create("씨발년아");
   }
 
 }

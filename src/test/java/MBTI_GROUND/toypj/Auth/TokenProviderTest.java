@@ -10,13 +10,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class TokenProviderTest {
   @Autowired
-  TokenProvider tokenProvider = new TokenProvider();
+  TokenProvider tokenProvider;
   @Value("${jwt.secret}")
   private String key;
 
   @Test
   void test1() {
-    tokenProvider.test();
     System.out.println("key = " + key);
   }
 }
