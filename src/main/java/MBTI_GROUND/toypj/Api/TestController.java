@@ -15,7 +15,13 @@ public class TestController {
 
   @GetMapping("/tokenTest")
   public String token(){
-    return tokenProvider.create("씨발년아");
+    return tokenProvider.createAccessToken("씨발년아");
   }
+
+  @GetMapping("/auth/test")
+  public String tokentest(){
+    return tokenProvider.validAccessTokenAndGetUserId(tokenProvider.createAccessToken("야스"));
+  }
+
 
 }

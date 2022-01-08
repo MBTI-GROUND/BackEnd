@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BookMark {
+public class BookMarkEntity {
   @Id
   @GeneratedValue
   private Long id;
