@@ -5,10 +5,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
-public class Comment {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class CommentEntity {
 
   @Id
   @GeneratedValue

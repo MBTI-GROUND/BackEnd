@@ -4,9 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
-public class Post {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class PostEntity {
   @Id
   @GeneratedValue
   private Long id;

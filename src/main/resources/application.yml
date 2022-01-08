@@ -1,0 +1,24 @@
+jwt:
+  Access: MBTI GROUND ACESS KEY입니다.
+  Refresh: MBTI GROUND REFRESH KEY입니다.
+
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/jwt #jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+
+logging:
+  level:
+    "[org.hibernate]": debug
