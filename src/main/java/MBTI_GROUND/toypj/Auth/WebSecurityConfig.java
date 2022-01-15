@@ -23,6 +23,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
   @Override
   public void configure(WebSecurity web) throws Exception {
@@ -35,11 +37,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.cors()
         .and()
         .csrf().disable()
+
+        .exceptionHandling()
+        .accessDeniedHandler(jwtAccessDeniedHandler)
+        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+
+        .and()
         .httpBasic().disable()
         .formLogin().disable()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
+
         .authorizeRequests()
         .antMatchers("/", "/auth/**").permitAll()
         .anyRequest()

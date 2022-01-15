@@ -41,7 +41,7 @@ public class TokenProvider {
   @Value("${jwt.Refresh}")
   private String refreshKey;
 
-  private final Date accessExpiryDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
+  private final Date accessExpiryDate = Date.from(Instant.now().plus(1, ChronoUnit.SECONDS));
   private final Date refreshExpiryDate = Date.from(Instant.now().plus(14, ChronoUnit.DAYS));
 
 
@@ -119,42 +119,26 @@ public class TokenProvider {
 
   public boolean isValidAccessToken(String token) {
     try {
-      Claims accessClaims = getAccessTokenClaims(token);
-      log.info("Access expireTime: " + accessClaims.getExpiration());
-      log.info("Access userId: " + accessClaims.getSubject());
+      Jwts.parserBuilder().setSigningKey(getAccessSignKey()).build().parseClaimsJws(token);
       return true;
-    } catch (ExpiredJwtException exception) {
-      log.info("만료된 ACESS JWT 토큰입니다.");
+    } catch (ExpiredJwtException e) {
+      log.info("만료된 ACCESS JWT 토큰입니다.");
     } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-      log.info("잘못된 ACESS JWT 서명입니다.");
-    } catch (NullPointerException exception) {
-      log.info("ACESS JWT 토큰이 없습니다.");
+      log.info("잘못된 ACCESS JWT 서명입니다.");
+    } catch (NullPointerException e) {
+      log.info("ACCESS JWT 토큰이 없습니다.");
     } catch (IllegalArgumentException e) {
-      log.info("ACESS JWT 토큰이 잘못되었습니다.");
+      log.info("ACCESS JWT 토큰이 잘못되었습니다.");
     } catch (UnsupportedJwtException e) {
-      log.info("지원되지 않는 ACESS JWT 토큰입니다.");
+      log.info("지원되지 않는 ACCESS JWT 토큰입니다.");
     }
     return false;
   }
 
-  public boolean isValidRefreshToken(String token) {
-    try {
-      Claims refreshClaims = getRefreshTokenClaims(token);
-      log.info("Refresh expireTime: " + refreshClaims.getExpiration());
-      log.info("Refresh userId: " + refreshClaims.getSubject());
+  public boolean isValidRefreshToken(String token)throws Exception{
+      Jwts.parserBuilder().setSigningKey(getRefreshSignKey()).build().parseClaimsJws(token);
       return true;
-    } catch (ExpiredJwtException exception) {
-      log.info("만료된 REFRESH JWT 토큰입니다.");
-    } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-      log.info("잘못된 REFRESH JWT 서명입니다.");
-    } catch (NullPointerException exception) {
-      log.info("REFRESH JWT 토큰이 없습니다.");
-    } catch (IllegalArgumentException e) {
-      log.info("REFRESH JWT 토큰이 잘못되었습니다.");
-    } catch (UnsupportedJwtException e) {
-      log.info("지원되지 않는 REFRESH JWT 토큰입니다.");
-    }
-    return false;
+
   }
 
   public TokenDto generateTokenDto(String userId) {

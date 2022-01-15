@@ -33,6 +33,7 @@ public class AuthService {
       throw new RuntimeException("이미 가입되어 있는 유저입니다.");
     }
     UserEntity userEntity = userRequestDto.toUser(passwordEncoder);
+    userRepository.save(userEntity);
     return UserResponseDto.of(userEntity);
 
   }
@@ -55,7 +56,7 @@ public class AuthService {
     return tokenDto;
   }
 
-  public TokenDto reissue(TokenRequestDto tokenRequestDto) {
+  public TokenDto reissue(TokenRequestDto tokenRequestDto) throws Exception {
     if (!tokenProvider.isValidRefreshToken(tokenRequestDto.getRefreshToken())) {
       throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
     }

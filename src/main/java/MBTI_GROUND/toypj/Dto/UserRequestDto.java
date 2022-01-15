@@ -14,11 +14,13 @@ public class UserRequestDto {
 
   private String email;
   private String password;
+  private String mbti;
 
   public UserEntity toUser(PasswordEncoder passwordEncoder) {
     return UserEntity.builder()
         .email(email)
         .password(passwordEncoder.encode(password))
+        .mbti(mbti)
         .build();
   }
 

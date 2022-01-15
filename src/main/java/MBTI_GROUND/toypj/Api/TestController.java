@@ -18,9 +18,9 @@ public class TestController {
     return tokenProvider.createAccessToken("씨발년아");
   }
 
-  @GetMapping("/auth/test")
-  public String tokentest(){
-    return tokenProvider.validAccessTokenAndGetUserId(tokenProvider.createAccessToken("야스"));
+  @GetMapping("/test")
+  public String test1(){
+    return "성공이다. 연금술사";
   }
 
 
