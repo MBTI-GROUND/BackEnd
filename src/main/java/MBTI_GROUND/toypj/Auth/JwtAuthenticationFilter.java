@@ -42,60 +42,59 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
     try {
+      System.out.println("JwtAuthenticationFilter");
+      System.out.println("request.getRequestURL() = " + request.getRequestURL());
+      System.out.println("request.getMethod() = " + request.getMethod());
       String accessToken = parseBearerToken(request);
       log.info("Filter is running");
       if (StringUtils.hasText(accessToken) && tokenProvider.isValidAccessToken(accessToken)) {
         String userId = tokenProvider.validAccessTokenAndGetUserId(accessToken);
         log.info("Authenticated user ID: " + userId);
-        Optional<UserEntity> userEntity = userRepository.findByEmail(userId);
-        String password = userEntity.orElseThrow(() -> new RuntimeException("사용자 정보를 가져올 수 없습니다."))
-            .getPassword();
-        AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-            userId, password, AuthorityUtils.NO_AUTHORITIES);
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
+        makeAuthenticated(request, userId);
       }
       // ACCESS TOKEN 만료되었을 경우
-      else if(StringUtils.hasText(accessToken)){
+      else if (StringUtils.hasText(accessToken)) {
         String refreshToken = parseRefreshToken(request);
-        if(StringUtils.hasText(refreshToken) && tokenProvider.isValidRefreshToken(refreshToken)){
+        if (StringUtils.hasText(refreshToken) && tokenProvider.isValidRefreshToken(refreshToken)) {
           String userId = tokenProvider.validRefreshTokenAndGetUserId(refreshToken);
-          log.info("Authenticated user ID: " + userId);
-          Optional<UserEntity> userEntity = userRepository.findByEmail(userId);
-          String password = userEntity.orElseThrow(() -> new RuntimeException("사용자 정보를 가져올 수 없습니다."))
-              .getPassword();
-          AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-              userId, password, AuthorityUtils.NO_AUTHORITIES);
-          authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-          SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-          securityContext.setAuthentication(authentication);
-          SecurityContextHolder.setContext(securityContext);
+          makeAuthenticated(request, userId);
           String reIssuedAccessToken = tokenProvider.createAccessToken(userId);
-          response.addHeader("REISSUEDACCESSTOKEN",reIssuedAccessToken);
+          response.addHeader("REISSUEDACCESSTOKEN", reIssuedAccessToken);
 
         }
       }
 
     } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-      request.setAttribute("exception","잘못된 ACCESS JWT 서명입니다.");
+      request.setAttribute("exception", "잘못된 ACCESS JWT 서명입니다.");
     } catch (NullPointerException exception) {
       log.info("REFRESH JWT 토큰이 없습니다.");
-      request.setAttribute("exception","REFRESH JWT 토큰이 없습니다." );
+      request.setAttribute("exception", "REFRESH JWT 토큰이 없습니다.");
+    } catch (ExpiredJwtException e) {
+      log.info("만료된 REFRESH JWT 토큰입니다.");
     } catch (IllegalArgumentException e) {
       log.info("REFRESH JWT 토큰이 잘못되었습니다.");
-      request.setAttribute("exception","REFRESH JWT 토큰이 잘못되었습니다.");
+      request.setAttribute("exception", "REFRESH JWT 토큰이 잘못되었습니다.");
     } catch (UnsupportedJwtException e) {
       log.info("지원되지 않는 REFRESH JWT 토큰입니다.");
-      request.setAttribute("exception","지원되지 않는 REFRESH JWT 토큰입니다.");
+      request.setAttribute("exception", "지원되지 않는 REFRESH JWT 토큰입니다.");
     } catch (Exception e) {
-      request.setAttribute("exception",e.getMessage());
+      request.setAttribute("exception", e.getMessage());
     }
     filterChain.doFilter(request, response);
 
 
+  }
 
+  private void makeAuthenticated(HttpServletRequest request, String userId) {
+    Optional<UserEntity> userEntity = userRepository.findByEmail(userId);
+    String password = userEntity.orElseThrow(() -> new RuntimeException("사용자 정보를 가져올 수 없습니다."))
+        .getPassword();
+    AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+        userId, password, AuthorityUtils.NO_AUTHORITIES);
+    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+    securityContext.setAuthentication(authentication);
+    SecurityContextHolder.setContext(securityContext);
   }
 
   private String parseBearerToken(HttpServletRequest request) {
@@ -106,9 +105,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     return null;
   }
 
-  private String parseRefreshToken(HttpServletRequest request){
+  private String parseRefreshToken(HttpServletRequest request) {
     String refreshToken = request.getHeader(REFRESH_HEADER);
-    if (StringUtils.hasText(refreshToken) && refreshToken.startsWith(REFRESH_PREFIX)){
+    if (StringUtils.hasText(refreshToken) && refreshToken.startsWith(REFRESH_PREFIX)) {
       return refreshToken.substring(8);
     }
     return null;
