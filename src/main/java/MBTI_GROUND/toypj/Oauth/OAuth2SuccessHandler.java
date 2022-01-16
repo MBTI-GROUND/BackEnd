@@ -32,6 +32,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     response.setContentType( "text/html;charset=utf-8" );
     response.setStatus(HttpServletResponse.SC_OK);
     response.getWriter().println("정답이다 연금술사");
+    response.getWriter().println(name);
+    response.getWriter().println(email);
 
 
   }
