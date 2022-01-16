@@ -21,7 +21,7 @@ public class TestController {
 
   @GetMapping("/test")
   public String test1(){
-    return "성공이다. 연금술사";
+    return "정답이다. 연금술사";
   }
 
 }
