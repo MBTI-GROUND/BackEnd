@@ -47,8 +47,8 @@ public class AuthService {
     TokenDto tokenDto = tokenProvider.generateTokenDto(userRequestDto.getEmail());
 
     RefreshToken refreshToken = RefreshToken.builder()
-        .key(authentication.getName())
-        .value(tokenDto.getRefreshToken())
+        .userId(authentication.getName())
+        .refreshToken(tokenDto.getRefreshToken())
         .build();
 
     refreshTokenRepository.save(refreshToken);
@@ -62,7 +62,7 @@ public class AuthService {
     }
     String userId = tokenProvider.getRefreshTokenClaims(tokenRequestDto.getRefreshToken())
         .getSubject();
-    RefreshToken refreshToken = refreshTokenRepository.findByKey(userId)
+    RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
         .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
 
     if (!refreshToken.getRefreshToken().equals(tokenRequestDto.getRefreshToken())) {
