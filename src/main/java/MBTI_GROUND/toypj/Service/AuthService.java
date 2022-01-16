@@ -65,7 +65,7 @@ public class AuthService {
     RefreshToken refreshToken = refreshTokenRepository.findByKey(userId)
         .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
 
-    if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
+    if (!refreshToken.getRefreshToken().equals(tokenRequestDto.getRefreshToken())) {
       throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
     }
     TokenDto tokenDto = tokenProvider.generateTokenDto(userId);
