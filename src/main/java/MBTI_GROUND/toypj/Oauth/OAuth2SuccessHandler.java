@@ -34,6 +34,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     response.getWriter().println("정답이다 연금술사");
     response.getWriter().println(name);
     response.getWriter().println(email);
+    String targeturl = "http://localhost:3000/login/oauth2/code/google";
+    getRedirectStrategy().sendRedirect(request,response,targeturl);
 
 
   }
