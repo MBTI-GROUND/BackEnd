@@ -28,7 +28,7 @@ public class AuthService {
   private final TokenProvider tokenProvider;
   private final RefreshTokenRepository refreshTokenRepository;
 
-  public UserResponseDto signup(UserRequestDto userRequestDto) {
+  public UserResponseDto signup(UserRequestDto userRequestDto) throws RuntimeException {
     if (userRepository.existsByEmail(userRequestDto.getEmail())) {
       throw new RuntimeException("이미 가입되어 있는 유저입니다.");
     }
