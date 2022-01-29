@@ -32,10 +32,11 @@ public class AuthController {
 
   @PostMapping("/reissue")
   public ResponseEntity<TokenDto> reissue(TokenRequestDto tokenRequestDto) throws Exception {
-   return ResponseEntity.ok(authService.reissue(tokenRequestDto));
+    return ResponseEntity.ok(authService.reissue(tokenRequestDto));
   }
+
   @GetMapping("/test")
-  public String test(){
+  public String test() {
     return "테스트중";
   }
 

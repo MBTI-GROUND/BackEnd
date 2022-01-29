@@ -42,15 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
     try {
-      System.out.println("JwtAuthenticationFilter");
-      System.out.println("request.getRequestURL() = " + request.getRequestURL());
-      System.out.println("request.getMethod() = " + request.getMethod());
       String accessToken = parseBearerToken(request);
       log.info("Filter is running");
       if (StringUtils.hasText(accessToken) && tokenProvider.isValidAccessToken(accessToken)) {
         String userId = tokenProvider.validAccessTokenAndGetUserId(accessToken);
         log.info("Authenticated user ID: " + userId);
         makeAuthenticated(request, userId);
+        response.addHeader("Authorization", accessToken);
       }
       // ACCESS TOKEN 만료되었을 경우
       else if (StringUtils.hasText(accessToken)) {
@@ -59,13 +57,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           String userId = tokenProvider.validRefreshTokenAndGetUserId(refreshToken);
           makeAuthenticated(request, userId);
           String reIssuedAccessToken = tokenProvider.createAccessToken(userId);
-          response.addHeader("REISSUEDACCESSTOKEN", reIssuedAccessToken);
+          response.addHeader("Authorization", reIssuedAccessToken);
 
         }
       }
+      else {
+        request.setAttribute("exception","토큰이 없는 사용자입니다.");
+      }
 
     } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-      request.setAttribute("exception", "잘못된 ACCESS JWT 서명입니다.");
+      request.setAttribute("exception", "잘못된 REFRESH JWT 서명입니다.");
     } catch (NullPointerException exception) {
       log.info("REFRESH JWT 토큰이 없습니다.");
       request.setAttribute("exception", "REFRESH JWT 토큰이 없습니다.");
