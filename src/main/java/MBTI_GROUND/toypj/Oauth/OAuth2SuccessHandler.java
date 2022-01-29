@@ -68,6 +68,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     response.setStatus(HttpServletResponse.SC_OK);
     var writer = response.getWriter();
     writer.println(objectMapper.writeValueAsString(tokenDto));
-    writer.flush();
+
   }
 }
