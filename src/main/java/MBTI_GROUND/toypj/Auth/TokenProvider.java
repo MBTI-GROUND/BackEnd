@@ -1,12 +1,7 @@
 package MBTI_GROUND.toypj.Auth;
-
-
 import MBTI_GROUND.toypj.Dto.TokenDto;
-import MBTI_GROUND.toypj.Entity.UserEntity;
-import MBTI_GROUND.toypj.Repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -16,15 +11,10 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -41,7 +31,7 @@ public class TokenProvider {
   @Value("${jwt.Refresh}")
   private String refreshKey;
 
-  private final Date accessExpiryDate = Date.from(Instant.now().plus(1, ChronoUnit.SECONDS));
+  private final Date accessExpiryDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
   private final Date refreshExpiryDate = Date.from(Instant.now().plus(14, ChronoUnit.DAYS));
 
 
@@ -150,7 +140,6 @@ public class TokenProvider {
     return TokenDto.builder()
         .grantType(BEARER_TYPE)
         .accessToken(accessToken)
-        .accessTokenExpiresIn(accessExpiryDate.getTime())
         .refreshToken(refreshToken)
         .build();
   }

@@ -7,6 +7,7 @@ import MBTI_GROUND.toypj.Dto.UserResponseDto;
 import MBTI_GROUND.toypj.Service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,12 @@ public class AuthController {
 
   @PostMapping("/reissue")
   public ResponseEntity<TokenDto> reissue(TokenRequestDto tokenRequestDto) throws Exception {
-   return ResponseEntity.ok(authService.reissue(tokenRequestDto));
+    return ResponseEntity.ok(authService.reissue(tokenRequestDto));
+  }
+
+  @GetMapping("/test")
+  public String test() {
+    return "테스트중";
   }
 
 }

@@ -25,16 +25,19 @@ public class UserEntity {
   private String phoneNumber;
   private MBTI mbti;
   private String nickname;
+
+  private String provider;
   @CreatedDate
   private LocalDateTime createdDate;
 
   @Builder
-  public UserEntity(String email,String password, String phoneNumber, String mbti, String nickname){
+  public UserEntity(String email,String password, String phoneNumber, String mbti, String nickname, String provider){
     this.email = email;
     this.password = password;
     this.phoneNumber = phoneNumber;
     this.mbti = MBTI.valueOf(mbti);
     this.nickname = nickname;
+    this.provider = provider;
   }
 
 
