@@ -1,9 +1,10 @@
 package MBTI_GROUND.toypj.Entity;
 
 import java.time.LocalDateTime;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,13 +21,17 @@ public class UserEntity {
   private Long id;
   private String email;
   private String password;
-  //private String username;
-  //private String role;
   private String phoneNumber;
+  @Enumerated(EnumType.STRING)
   private MBTI mbti;
   private String nickname;
   @CreatedDate
   private LocalDateTime createdDate;
+  @OneToMany(mappedBy = "userEntity")
+  private List<PostEntity> postEntities = new ArrayList<>();
+
+  @OneToMany(mappedBy = "userEntity")
+  private List<CommentEntity> commentEntities = new ArrayList<>();
 
   @Builder
   public UserEntity(String email,String password, String phoneNumber, String mbti, String nickname){

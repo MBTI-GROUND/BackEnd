@@ -1,5 +1,8 @@
-package MBTI_GROUND.toypj.Auth;
+package MBTI_GROUND.toypj.Config;
 
+import MBTI_GROUND.toypj.Auth.JwtAccessDeniedHandler;
+import MBTI_GROUND.toypj.Auth.JwtAuthenticationEntryPoint;
+import MBTI_GROUND.toypj.Auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
