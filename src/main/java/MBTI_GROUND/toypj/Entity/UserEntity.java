@@ -16,32 +16,30 @@ import org.springframework.data.annotation.CreatedDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity {
 
-  @Id
-  @GeneratedValue
-  private Long id;
-  private String email;
-  private String password;
-  private String phoneNumber;
-  @Enumerated(EnumType.STRING)
-  private MBTI mbti;
-  private String nickname;
-  @CreatedDate
-  private LocalDateTime createdDate;
-  @OneToMany(mappedBy = "userEntity")
-  private List<PostEntity> postEntities = new ArrayList<>();
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String email;
+    private String password;
+    private String phoneNumber;
+    @Enumerated(EnumType.STRING)
+    private MBTI mbti;
+    private String nickname;
+    @CreatedDate
+    private LocalDateTime createdDate;
 
-  @OneToMany(mappedBy = "userEntity")
-  private List<CommentEntity> commentEntities = new ArrayList<>();
+    public enum MBTI{
+        ISTJ, ISFJ, INFJ, INTJ, ISTP, ISFP, INFP, INTP, ESTP, ESFP, ENFP, ENTP, ESTJ, ESFJ, ENFJ, ENTJ, NONE
+    }
 
-  @Builder
-  public UserEntity(String email,String password, String phoneNumber, String mbti, String nickname){
-    this.email = email;
-    this.password = password;
-    this.phoneNumber = phoneNumber;
-    this.mbti = MBTI.valueOf(mbti);
-    this.nickname = nickname;
-  }
-
+    @Builder
+    public UserEntity(String email, String password, String phoneNumber, String mbti, String nickname) {
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.mbti = MBTI.valueOf(mbti);
+        this.nickname = nickname;
+    }
 
 
 }

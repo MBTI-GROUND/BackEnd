@@ -16,10 +16,10 @@ public class  CommentEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "POSTENTITY_ID")
   private PostEntity postEntity;
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USERENTITY_ID")
   private UserEntity userEntity;
   private String comment;

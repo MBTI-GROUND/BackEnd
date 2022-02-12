@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       FilterChain filterChain) throws ServletException, IOException {
     try {
       String accessToken = parseBearerToken(request);
-      log.info("Filter is running");
+      log.info("JwtAuthenticationFilter is running");
       if (StringUtils.hasText(accessToken) && tokenProvider.isValidAccessToken(accessToken)) {
         String userId = tokenProvider.validAccessTokenAndGetUserId(accessToken);
         log.info("Authenticated user ID: " + userId);
@@ -79,7 +79,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       }
 
     } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-      request.setAttribute("exception","잘못된 ACCESS JWT 서명입니다.");
+      request.setAttribute("exception","잘못된 REFRESH JWT 서명입니다.");
     } catch (NullPointerException exception) {
       log.info("REFRESH JWT 토큰이 없습니다.");
       request.setAttribute("exception","REFRESH JWT 토큰이 없습니다." );

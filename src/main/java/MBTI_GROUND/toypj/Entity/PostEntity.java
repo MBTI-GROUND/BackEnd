@@ -16,7 +16,7 @@ public class PostEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USERENTITY_ID")
   private UserEntity userEntity;
   private String type;
