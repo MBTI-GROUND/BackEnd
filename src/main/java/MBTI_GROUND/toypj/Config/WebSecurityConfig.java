@@ -1,4 +1,4 @@
-package MBTI_GROUND.toypj.Auth;
+package MBTI_GROUND.toypj.Config;
 
 import MBTI_GROUND.toypj.Oauth.OAuth2FailureHandler;
 import MBTI_GROUND.toypj.Oauth.OAuth2SuccessHandler;
@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private final PrincipalOauth2UserService principalOauth2UserService;
 
   @Override
-  public void configure(WebSecurity web) throws Exception {
+  public void configure(WebSecurity web) {
     web.ignoring()
         .antMatchers("/h2-console/**", "/favicon.ico");
   }
@@ -59,17 +59,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
 
         .authorizeRequests()
-        .antMatchers("/", "/auth/**","/ws","/sub").permitAll()
-        .antMatchers("/", "/auth/**", "/oauth2/**", "/login/**").permitAll()
+        .antMatchers("/", "/auth/**", "/oauth2/**", "/login/**","/ws/**","/sub/**").permitAll()
         .anyRequest()
         .authenticated()
         .and()
         .oauth2Login()
-//        .authorizationEndpoint().baseUri("/oauth2/authorize")
-//        .and()
-//        .redirectionEndpoint()
-//        .baseUri("/*/oauth2/code/*")
-//        .and()
         .userInfoEndpoint()
         .userService(principalOauth2UserService)
         .and()
