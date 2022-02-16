@@ -21,7 +21,7 @@ public class UserService {
   }
 
   public UserResponseDto getMyInfo(){
-    return userRepository.findById(SecurityUtil.getCurrentUserId())
+    return userRepository.findByEmail(SecurityUtil.getCurrentUserId())
         .map(UserResponseDto::of)
         .orElseThrow(()-> new RuntimeException("로그인 유저 정보가 없습니다."));
   }

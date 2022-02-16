@@ -27,7 +27,7 @@ public class UserEntity {
     private String nickname;
     @CreatedDate
     private LocalDateTime createdDate;
-
+    
     public enum MBTI{
         ISTJ, ISFJ, INFJ, INTJ, ISTP, ISFP, INFP, INTP, ESTP, ESFP, ENFP, ENTP, ESTJ, ESFJ, ENFJ, ENTJ, NONE
     }
