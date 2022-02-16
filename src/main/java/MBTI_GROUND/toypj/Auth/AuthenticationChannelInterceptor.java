@@ -11,17 +11,17 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE+99)
+@Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class AuthenticationChannelInterceptor implements ChannelInterceptor {
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         log.info("AuthenticationChannelInterceptor is running");
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        System.out.println("message = " + message);
-        System.out.println("message.getHeaders() = " + message.getHeaders());
-        System.out.println("message.getPayload() = " + message.getPayload());
-        System.out.println("accessor.getNativeHeader(\"Authorization\") = " + accessor.getNativeHeader("Authorization"));
+        log.info("message = {}", message);
+        log.info("message.getHeaders() = {} ", message.getHeaders());
+        log.info("message.getPayload() = {}", message.getPayload());
+        log.info("accessor.getNativeHeader(\"Authorization\") = {}", accessor.getNativeHeader("Authorization"));
         return ChannelInterceptor.super.preSend(message, channel);
     }
 }

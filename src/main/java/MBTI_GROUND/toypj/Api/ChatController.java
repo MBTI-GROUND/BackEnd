@@ -15,7 +15,7 @@ public class ChatController {
     private final SimpMessageSendingOperations messageSendingOperations;
 
     @MessageMapping("/message")
-    public void chat(@Valid ChatRequestDto message){
+    public void chat(ChatRequestDto message){
         if(ChatRequestDto.MessageType.ENTER.equals(message.getMessageType())){
 
             message.setMessage(message.getSender()+"님이 입장하셨습니다.");

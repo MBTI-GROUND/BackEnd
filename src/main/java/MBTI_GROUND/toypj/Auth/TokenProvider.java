@@ -144,22 +144,6 @@ public class TokenProvider {
         .build();
   }
 
-  /*@Transactional(readOnly = true)
-  public Authentication getAuthentication(String accessToken) {
-    Claims accessTokenClaims = getAccessTokenClaims(accessToken);
-    String userId = accessTokenClaims.getSubject();
-    if (userId == null) {
-      throw new RuntimeException("유저 ID정보가 없는 토큰입니다.");
-    }
-    Optional<UserEntity> foundUser = userRepository.findByEmail(userId);
-    if (foundUser.isPresent()) {
-      String foundUserId = foundUser.get().getEmail();
-      String foundUserPassword = foundUser.get().getPassword();
-      return new UsernamePasswordAuthenticationToken(foundUserId, foundUserPassword,
-          AuthorityUtils.NO_AUTHORITIES);
-    } else {
-      throw new RuntimeException("DB에 유저 정보가 없습니다.");
-    }
-  }*/
+
 
 }

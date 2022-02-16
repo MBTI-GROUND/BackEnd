@@ -1,5 +1,6 @@
 package MBTI_GROUND.toypj.Service;
 
+import MBTI_GROUND.toypj.Auth.SecurityUtil;
 import MBTI_GROUND.toypj.Dto.UserResponseDto;
 import MBTI_GROUND.toypj.Entity.UserEntity;
 import MBTI_GROUND.toypj.Repository.UserRepository;
@@ -7,25 +8,30 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+@DisplayName("UserService 테스트")
 class UserServiceTest {
 
-    @Autowired
-    UserRepository userRepository;
+    @Mock private UserRepository userRepository;
 
-    @Autowired
-    UserService userService;
+    @InjectMocks
+    private UserService userService;
+
+    private UserEntity userEntity;
 
     @BeforeEach
     void setup(){
@@ -36,25 +42,28 @@ class UserServiceTest {
                 .password("test")
                 .phoneNumber("01047372086")
                 .build();
-        userRepository.save(userEntity);
 
     }
 
     @Test
     @DisplayName("유저 정보를 가져온다.")
     void getUserInfo() {
-        Optional<UserEntity> user = userRepository.findByEmail("hose0728@naver.com");
-        UserEntity userEntity = user.orElse(null);
-        String email = Objects.requireNonNull(userEntity).getEmail();
-        System.out.println("email = " + email);
-        UserResponseDto userInfo;
-        userInfo = userService.getUserInfo(email);
-        System.out.println("userInfo.getEmail() = " + userInfo.getEmail());
+        //given
+        given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(userEntity));
+
+        //when
+        assert userEntity != null;
+        UserResponseDto result = userService.getUserInfo(userEntity.getEmail());
+
+        //then
+        assertEquals(result.getEmail(), userEntity.getEmail());
 
     }
 
     @Test
+    @WithMockUser
     @DisplayName("내 정보를 가져온다.")
     void getMyInfo() {
+
     }
 }
