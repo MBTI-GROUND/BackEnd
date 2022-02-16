@@ -1,5 +1,8 @@
-package MBTI_GROUND.toypj.Config;
+package MBTI_GROUND.toypj.Auth;
 
+import MBTI_GROUND.toypj.Oauth.OAuth2FailureHandler;
+import MBTI_GROUND.toypj.Oauth.OAuth2SuccessHandler;
+import MBTI_GROUND.toypj.Oauth.PrincipalOauth2UserService;
 import MBTI_GROUND.toypj.Auth.JwtAccessDeniedHandler;
 import MBTI_GROUND.toypj.Auth.JwtAuthenticationEntryPoint;
 import MBTI_GROUND.toypj.Auth.JwtAuthenticationFilter;
@@ -28,6 +31,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+  private final OAuth2SuccessHandler oAuth2SuccessHandler;
+  private final OAuth2FailureHandler oAuth2FailureHandler;
+  private final PrincipalOauth2UserService principalOauth2UserService;
 
   @Override
   public void configure(WebSecurity web) throws Exception {
@@ -54,8 +60,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         .authorizeRequests()
         .antMatchers("/", "/auth/**","/ws","/sub").permitAll()
+        .antMatchers("/", "/auth/**", "/oauth2/**", "/login/**").permitAll()
         .anyRequest()
-        .authenticated();
+        .authenticated()
+        .and()
+        .oauth2Login()
+//        .authorizationEndpoint().baseUri("/oauth2/authorize")
+//        .and()
+//        .redirectionEndpoint()
+//        .baseUri("/*/oauth2/code/*")
+//        .and()
+        .userInfoEndpoint()
+        .userService(principalOauth2UserService)
+        .and()
+        .successHandler(oAuth2SuccessHandler)
+        .failureHandler(oAuth2FailureHandler);
 
     http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
   }

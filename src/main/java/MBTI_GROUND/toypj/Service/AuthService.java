@@ -28,7 +28,7 @@ public class AuthService {
   private final TokenProvider tokenProvider;
   private final RefreshTokenRepository refreshTokenRepository;
 
-  public UserResponseDto signup(UserRequestDto userRequestDto) {
+  public UserResponseDto signup(UserRequestDto userRequestDto) throws RuntimeException {
     if (userRepository.existsByEmail(userRequestDto.getEmail())) {
       throw new RuntimeException("이미 가입되어 있는 유저입니다.");
     }
@@ -47,8 +47,8 @@ public class AuthService {
     TokenDto tokenDto = tokenProvider.generateTokenDto(userRequestDto.getEmail());
 
     RefreshToken refreshToken = RefreshToken.builder()
-        .key(authentication.getName())
-        .value(tokenDto.getRefreshToken())
+        .userId(authentication.getName())
+        .refreshToken(tokenDto.getRefreshToken())
         .build();
 
     refreshTokenRepository.save(refreshToken);
@@ -62,10 +62,10 @@ public class AuthService {
     }
     String userId = tokenProvider.getRefreshTokenClaims(tokenRequestDto.getRefreshToken())
         .getSubject();
-    RefreshToken refreshToken = refreshTokenRepository.findByKey(userId)
+    RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
         .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
 
-    if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
+    if (!refreshToken.getRefreshToken().equals(tokenRequestDto.getRefreshToken())) {
       throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
     }
     TokenDto tokenDto = tokenProvider.generateTokenDto(userId);
