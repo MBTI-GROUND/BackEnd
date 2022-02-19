@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatRoomEntity {
+public class ChatRoomEntity extends BaseEntity{
 
     @Id
     @GeneratedValue

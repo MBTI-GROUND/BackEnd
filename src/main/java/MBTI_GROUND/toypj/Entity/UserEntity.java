@@ -1,9 +1,8 @@
 package MBTI_GROUND.toypj.Entity;
 
 import java.time.LocalDateTime;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserEntity {
+public class UserEntity extends BaseEntity{
 
     @Id
     @GeneratedValue
@@ -24,8 +23,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private MBTI mbti;
     private String nickname;
-    @CreatedDate
-    private LocalDateTime createdDate;
+
     
     public enum MBTI{
         ISTJ, ISFJ, INFJ, INTJ, ISTP, ISFP, INFP, INTP, ESTP, ESFP, ENFP, ENTP, ESTJ, ESFJ, ENFJ, ENTJ, NONE
