@@ -1,6 +1,5 @@
 package MBTI_GROUND.toypj.Service;
 
-import MBTI_GROUND.toypj.Auth.SecurityUtil;
 import MBTI_GROUND.toypj.Dto.UserResponseDto;
 import MBTI_GROUND.toypj.Entity.UserEntity;
 import MBTI_GROUND.toypj.Repository.UserRepository;
@@ -16,10 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,11 +72,10 @@ class UserServiceTest {
         SecurityContextHolder.setContext(securityContext);
         given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(userEntity));
 
-
         //when
         UserResponseDto myInfo = userService.getMyInfo();
-        assertEquals(myInfo.getEmail(), userEntity.getEmail());
         //then
+        assertEquals(myInfo.getEmail(), userEntity.getEmail());
 
     }
 }
