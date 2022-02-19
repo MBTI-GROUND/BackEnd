@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TokenProviderTest {
+class  TokenProviderTest {
   @Autowired
   TokenProvider tokenProvider;
   @Value("${jwt.secret}")

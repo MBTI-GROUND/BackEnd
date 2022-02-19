@@ -2,15 +2,12 @@ package MBTI_GROUND.toypj.Oauth;
 
 import MBTI_GROUND.toypj.Auth.TokenProvider;
 import MBTI_GROUND.toypj.Dto.TokenDto;
-import MBTI_GROUND.toypj.Dto.UserResponseDto;
-import MBTI_GROUND.toypj.Entity.MBTI;
 import MBTI_GROUND.toypj.Entity.RefreshToken;
 import MBTI_GROUND.toypj.Entity.UserEntity;
 import MBTI_GROUND.toypj.Repository.RefreshTokenRepository;
 import MBTI_GROUND.toypj.Repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
