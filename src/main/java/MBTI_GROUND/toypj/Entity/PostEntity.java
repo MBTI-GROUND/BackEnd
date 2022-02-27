@@ -3,6 +3,7 @@ package MBTI_GROUND.toypj.Entity;
 import javax.persistence.*;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +27,23 @@ public class PostEntity extends BaseEntity{
   private List<CommentEntity> commentEntities = new ArrayList<>();
   private int likeCount;
   private int hateCount;
+
+
+  @Builder
+  public PostEntity(String title,String contents, String type, UserEntity userEntity ){
+    this.title = title;
+    this.userEntity = userEntity;
+    this.contents = contents;
+    this.type = type;
+    this.likeCount = 0;
+    this.hateCount = 0;
+  }
+
+  public void update(String type,String title, String contents){
+    this.title = title;
+    this.type = type;
+    this.contents = contents;
+  }
 
 
 }

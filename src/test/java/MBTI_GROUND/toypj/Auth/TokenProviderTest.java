@@ -1,21 +1,44 @@
 package MBTI_GROUND.toypj.Auth;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
+class TokenProviderTest {
 
-@SpringBootTest
-class  TokenProviderTest {
-  @Autowired
-  TokenProvider tokenProvider;
-  @Value("${jwt.secret}")
-  private String key;
+    @Test
+    void createAccessToken() {
+    }
 
-  @Test
-  void test1() {
-    System.out.println("key = " + key);
-  }
+    @Test
+    void createRefreshToken() {
+    }
+
+    @Test
+    void validAccessTokenAndGetUserId() {
+    }
+
+    @Test
+    void validRefreshTokenAndGetUserId() {
+    }
+
+    @Test
+    void getAccessTokenClaims() {
+    }
+
+    @Test
+    void getRefreshTokenClaims() {
+    }
+
+    @Test
+    void isValidAccessToken() {
+    }
+
+    @Test
+    void isValidRefreshToken() {
+    }
+
+    @Test
+    void generateTokenDto() {
+    }
 }

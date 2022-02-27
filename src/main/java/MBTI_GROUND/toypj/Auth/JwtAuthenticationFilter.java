@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String accessToken = parseBearerToken(request);
             log.info("JwtAuthenticationFilter is running");
-            if (StringUtils.hasText(accessToken) && tokenProvider.isValidAccessToken(accessToken)) {
+            if (StringUtils.hasText(accessToken) && tokenProvider.isValidAccessToken(accessToken,request)) {
                 String userId = tokenProvider.validAccessTokenAndGetUserId(accessToken);
                 log.info("Authenticated user ID: " + userId);
                 Optional<UserEntity> userEntity = userRepository.findByEmail(userId);

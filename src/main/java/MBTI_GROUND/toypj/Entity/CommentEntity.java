@@ -25,8 +25,5 @@ public class  CommentEntity extends BaseEntity{
   private String comment;
   private int likeCount;
   private int hateCount;
-  @CreatedDate
-  private LocalDateTime createDate;
-
 
 }

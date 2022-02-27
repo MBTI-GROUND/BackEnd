@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @Service
 @Slf4j
@@ -107,20 +109,28 @@ public class TokenProvider {
     }
   }
 
-  public boolean isValidAccessToken(String token) {
+  public boolean isValidAccessToken(String token, HttpServletRequest request) {
     try {
       Jwts.parserBuilder().setSigningKey(getAccessSignKey()).build().parseClaimsJws(token);
       return true;
     } catch (ExpiredJwtException e) {
       log.info("만료된 ACCESS JWT 토큰입니다.");
+      request.setAttribute("exception", "만료된 ACCESS JWT 토큰입니다.");
     } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
       log.info("잘못된 ACCESS JWT 서명입니다.");
+      request.setAttribute("exception", "잘못된 ACCESS JWT 서명입니다.");
     } catch (NullPointerException e) {
       log.info("ACCESS JWT 토큰이 없습니다.");
+      request.setAttribute("exception", "ACCESS JWT 토큰이 없습니다.");
     } catch (IllegalArgumentException e) {
       log.info("ACCESS JWT 토큰이 잘못되었습니다.");
+      request.setAttribute("exception", "ACCESS JWT 토큰이 잘못되었습니다.");
     } catch (UnsupportedJwtException e) {
       log.info("지원되지 않는 ACCESS JWT 토큰입니다.");
+      request.setAttribute("exception", "지원되지 않는 ACCESS JWT 토큰입니다.");
+    }catch (Exception e){
+      log.info(e.getMessage());
+      request.setAttribute("exception", e.getMessage());
     }
     return false;
   }
