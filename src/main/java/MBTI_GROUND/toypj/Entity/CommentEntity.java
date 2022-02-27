@@ -11,7 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class  CommentEntity {
+public class  CommentEntity extends BaseEntity{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +25,5 @@ public class  CommentEntity {
   private String comment;
   private int likeCount;
   private int hateCount;
-  @CreatedDate
-  private LocalDateTime createDate;
-
 
 }

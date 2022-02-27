@@ -16,9 +16,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
       AuthenticationException authException) throws IOException, ServletException {
     // 유효한 자격증명을 제공하지 않고 접근하려 할 때 401
     String exception = (String)request.getAttribute("exception");
-    if(exception== null){
-      exception = "토큰이 없는 사용자입니다.";
-    }
     response.setContentType( "text/html;charset=utf-8" );
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.getWriter().println(exception);

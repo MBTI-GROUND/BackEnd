@@ -10,20 +10,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RefreshToken {
+public class RefreshToken extends BaseEntity{
 
   @Id
-  private String key;
-  private String value;
+  private String userId;
+  private String refreshToken;
 
   public void updateValue(String refreshToken){
-    this.value = refreshToken;
+    this.refreshToken = refreshToken;
   }
 
   @Builder
-  public RefreshToken(String key, String value){
-    this.key = key;
-    this.value = value;
+  public RefreshToken(String userId, String refreshToken){
+    this.userId = userId;
+    this.refreshToken = refreshToken;
   }
 
 }

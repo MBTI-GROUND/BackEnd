@@ -1,12 +1,7 @@
 package MBTI_GROUND.toypj.Auth;
-
-
 import MBTI_GROUND.toypj.Dto.TokenDto;
-import MBTI_GROUND.toypj.Entity.UserEntity;
-import MBTI_GROUND.toypj.Repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -16,15 +11,12 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @Service
@@ -41,7 +33,7 @@ public class TokenProvider {
   @Value("${jwt.Refresh}")
   private String refreshKey;
 
-  private final Date accessExpiryDate = Date.from(Instant.now().plus(1, ChronoUnit.SECONDS));
+  private final Date accessExpiryDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
   private final Date refreshExpiryDate = Date.from(Instant.now().plus(14, ChronoUnit.DAYS));
 
 
@@ -117,20 +109,28 @@ public class TokenProvider {
     }
   }
 
-  public boolean isValidAccessToken(String token) {
+  public boolean isValidAccessToken(String token, HttpServletRequest request) {
     try {
       Jwts.parserBuilder().setSigningKey(getAccessSignKey()).build().parseClaimsJws(token);
       return true;
     } catch (ExpiredJwtException e) {
       log.info("만료된 ACCESS JWT 토큰입니다.");
+      request.setAttribute("exception", "만료된 ACCESS JWT 토큰입니다.");
     } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
       log.info("잘못된 ACCESS JWT 서명입니다.");
+      request.setAttribute("exception", "잘못된 ACCESS JWT 서명입니다.");
     } catch (NullPointerException e) {
       log.info("ACCESS JWT 토큰이 없습니다.");
+      request.setAttribute("exception", "ACCESS JWT 토큰이 없습니다.");
     } catch (IllegalArgumentException e) {
       log.info("ACCESS JWT 토큰이 잘못되었습니다.");
+      request.setAttribute("exception", "ACCESS JWT 토큰이 잘못되었습니다.");
     } catch (UnsupportedJwtException e) {
       log.info("지원되지 않는 ACCESS JWT 토큰입니다.");
+      request.setAttribute("exception", "지원되지 않는 ACCESS JWT 토큰입니다.");
+    }catch (Exception e){
+      log.info(e.getMessage());
+      request.setAttribute("exception", e.getMessage());
     }
     return false;
   }
@@ -150,7 +150,6 @@ public class TokenProvider {
     return TokenDto.builder()
         .grantType(BEARER_TYPE)
         .accessToken(accessToken)
-        .accessTokenExpiresIn(accessExpiryDate.getTime())
         .refreshToken(refreshToken)
         .build();
   }

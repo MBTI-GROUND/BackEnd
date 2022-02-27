@@ -6,13 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class TokenDto {
+public class CommentResponseDto {
 
-  private String grantType;
-  private String accessToken;
-  private String refreshToken;
-
+    private String nickname;
+    private int likeCount;
+    private int hateCount;
+    private String comment;
 }
