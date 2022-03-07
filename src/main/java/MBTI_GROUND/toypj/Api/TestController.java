@@ -1,6 +1,7 @@
 package MBTI_GROUND.toypj.Api;
 
 import MBTI_GROUND.toypj.Auth.TokenProvider;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Api(tags = {"테스트용 API"})
 @RequiredArgsConstructor
 public class TestController {
 

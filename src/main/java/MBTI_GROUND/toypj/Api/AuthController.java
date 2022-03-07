@@ -5,6 +5,7 @@ import MBTI_GROUND.toypj.Dto.TokenRequestDto;
 import MBTI_GROUND.toypj.Dto.UserRequestDto;
 import MBTI_GROUND.toypj.Dto.UserResponseDto;
 import MBTI_GROUND.toypj.Service.AuthService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@Api(tags = {"인증 API"})
 public class AuthController {
 
   private final AuthService authService;

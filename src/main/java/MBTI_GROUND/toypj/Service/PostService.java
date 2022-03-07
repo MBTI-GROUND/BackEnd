@@ -22,22 +22,22 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public PostResponseDto createPost(PostRequestDto postRequestDto){
+    public PostResponseDto createPost(PostRequestDto postRequestDto) {
         Optional<UserEntity> writer = userRepository.findByEmail(postRequestDto.getWriterId());
-        if (writer.isPresent()){
+        if (writer.isPresent()) {
             UserEntity writerUserEntity = writer.get();
             PostEntity newPostEntity = postRequestDto.toPostEntity(writerUserEntity);
             postRepository.save(newPostEntity);
 
             return PostResponseDto.of(newPostEntity);
-        }
-        else{
+        } else {
+            // 예외처리 필요
             return null;
         }
 
     }
 
-    public PostResponseDto findOne(Long id){
+    public PostResponseDto findOne(Long id) {
         Optional<PostEntity> findPost = postRepository.findById(id);
         return findPost.map(PostResponseDto::of).orElse(null);
     }
@@ -51,15 +51,66 @@ public class PostService {
         return responseDtos;
     }
 
-    public void updPost(PostRequestDto postRequestDto){
+    public PostResponseDto updPost(PostRequestDto postRequestDto) {
         Optional<PostEntity> findPost = postRepository.findById(postRequestDto.getId());
-        if(findPost.isPresent()){
+        if (findPost.isPresent()) {
             PostEntity oldPost = findPost.get();
-            oldPost.update(postRequestDto.getType(), postRequestDto.getTitle(), postRequestDto.getContents());
+            oldPost.update(postRequestDto.getTitle(), postRequestDto.getContents());
             postRepository.save(oldPost);
-        }
+
+            return PostResponseDto.of(oldPost);
+        } else
+            // 예외처리 필요
+            return null;
     }
 
+    public void delPost(Long id) {
+        Optional<PostEntity> findPost = postRepository.findById(id);
+        if (findPost.isPresent()) {
+            PostEntity target = findPost.get();
+            postRepository.delete(target);
+        } // 예외처리 필요
+    }
+
+    public void likeCountPlus(Long id){
+        Optional<PostEntity> findPost = postRepository.findById(id);
+        if(findPost.isPresent()) {
+            PostEntity target = findPost.get();
+            target.updateLikeCount(1);
+            postRepository.save(target);
+        } // 에외처리 필요
+
+   }
+
+    public void likeCountMinus(Long id){
+        Optional<PostEntity> findPost = postRepository.findById(id);
+        if(findPost.isPresent()) {
+            PostEntity target = findPost.get();
+            target.updateLikeCount(-1);
+            postRepository.save(target);
+        } // 에외처리 필요
+
+    }
+
+    public void hateCountPlus(Long id){
+        Optional<PostEntity> findPost = postRepository.findById(id);
+        if(findPost.isPresent()) {
+            PostEntity target = findPost.get();
+            target.updateHateCount(1);
+            postRepository.save(target);
+        } // 에외처리 필요
+
+    }
+
+    public void hateCountMinus(Long id){
+        Optional<PostEntity> findPost = postRepository.findById(id);
+        if(findPost.isPresent()) {
+            PostEntity target = findPost.get();
+            target.updateHateCount(-1);
+            postRepository.save(target);
+        } // 에외처리 필요
+
+    }
 
 
 }

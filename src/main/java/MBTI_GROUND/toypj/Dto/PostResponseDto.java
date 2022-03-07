@@ -18,6 +18,7 @@ public class PostResponseDto {
 
     private Long id;
     private String nickname;
+    private String title;
     private String type;
     private String contents;
     private int likeCount;
@@ -29,6 +30,7 @@ public class PostResponseDto {
     public static PostResponseDto of(PostEntity postEntity){
         return PostResponseDto.builder()
                 .id(postEntity.getId())
+                .title(postEntity.getTitle())
                 .contents(postEntity.getContents())
                 .type(postEntity.getType())
                 .likeCount(postEntity.getLikeCount())

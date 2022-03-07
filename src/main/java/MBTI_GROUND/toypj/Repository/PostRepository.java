@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<PostEntity,Long> {
 
-    public List<PostEntity> findAllByTypeOrderByCreatedDateDesc(String type);
+    List<PostEntity> findAllByTypeOrderByCreatedDateDesc(String type);
 
 
 }

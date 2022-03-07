@@ -2,6 +2,7 @@ package MBTI_GROUND.toypj.Api;
 
 import MBTI_GROUND.toypj.Dto.UserResponseDto;
 import MBTI_GROUND.toypj.Service.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@Api(tags = {"사용자 API"})
 public class UserController {
 
   private final UserService userService;

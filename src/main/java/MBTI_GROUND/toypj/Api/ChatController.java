@@ -1,6 +1,7 @@
 package MBTI_GROUND.toypj.Api;
 
 import MBTI_GROUND.toypj.Dto.ChatRequestDto;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -10,6 +11,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
+@Api(tags = {"채팅 API"})
 public class ChatController {
 
     private final SimpMessageSendingOperations messageSendingOperations;
