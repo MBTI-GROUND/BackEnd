@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
 
         .authorizeRequests()
-        .antMatchers("/", "/auth/**", "/oauth2/**", "/login/**","/ws/**","/sub/**",
+        .antMatchers("/", "/auth/**", "/oauth2/**", "/login/**","/ws/**","/sub/**", "/post/**",
                 "/v2/**", // swagger
                 "/webjars/**", // swagger
                 "/swagger**", // swagger
@@ -67,7 +67,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .successHandler(oAuth2SuccessHandler)
         .failureHandler(oAuth2FailureHandler);
-
     http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
   }
 }

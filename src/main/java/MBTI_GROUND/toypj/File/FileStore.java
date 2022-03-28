@@ -1,11 +1,9 @@
 package MBTI_GROUND.toypj.File;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,13 +11,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-@Slf4j
-public class FileUploader {
+public class  FileStore {
 
     @Value("${file.dir}")
     private String fileDir;
 
-    private String getFullPath(String filename) {
+    public String getFullPath(String filename) {
         return fileDir + filename;
     }
 
@@ -55,13 +52,5 @@ public class FileUploader {
         return originalFilename.substring(pos + 1);
     }
 
-    @PostConstruct
-    public void init(){
-        File file = new File(fileDir);
-        if(!file.exists()){
-            boolean mkdir = file.mkdir();
-            log.info("파일 생성 여부: {}",mkdir);
 
-        }
-    }
 }

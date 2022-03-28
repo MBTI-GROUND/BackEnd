@@ -4,6 +4,8 @@ import MBTI_GROUND.toypj.Dto.PostRequestDto;
 import MBTI_GROUND.toypj.Dto.PostResponseDto;
 import MBTI_GROUND.toypj.Entity.PostEntity;
 import MBTI_GROUND.toypj.Entity.UserEntity;
+import MBTI_GROUND.toypj.Exception.PostNotFoundException;
+import MBTI_GROUND.toypj.Exception.UserNotFoundException;
 import MBTI_GROUND.toypj.Repository.PostRepository;
 import MBTI_GROUND.toypj.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public PostResponseDto createPost(PostRequestDto postRequestDto) {
+    public PostResponseDto createPost(PostRequestDto postRequestDto) throws RuntimeException {
         Optional<UserEntity> writer = userRepository.findByEmail(postRequestDto.getWriterId());
         if (writer.isPresent()) {
             UserEntity writerUserEntity = writer.get();
@@ -31,15 +33,19 @@ public class PostService {
 
             return PostResponseDto.of(newPostEntity);
         } else {
-            // 예외처리 필요
-            return null;
+            throw new UserNotFoundException("유저 정보 없음");
         }
 
     }
 
-    public PostResponseDto findOne(Long id) {
+    public PostResponseDto findOne(Long id) throws RuntimeException {
         Optional<PostEntity> findPost = postRepository.findById(id);
-        return findPost.map(PostResponseDto::of).orElse(null);
+        if (findPost.isPresent()) {
+            return PostResponseDto.of(findPost.get());
+        } else {
+            throw new PostNotFoundException("ID에 해당하는 게시글 없음");
+        }
+
     }
 
     public List<PostResponseDto> findAll(String type) {
@@ -51,7 +57,7 @@ public class PostService {
         return responseDtos;
     }
 
-    public PostResponseDto updPost(PostRequestDto postRequestDto) {
+    public PostResponseDto updPost(PostRequestDto postRequestDto) throws RuntimeException {
         Optional<PostEntity> findPost = postRepository.findById(postRequestDto.getId());
         if (findPost.isPresent()) {
             PostEntity oldPost = findPost.get();
@@ -61,55 +67,69 @@ public class PostService {
             return PostResponseDto.of(oldPost);
         } else
             // 예외처리 필요
-            return null;
+            throw new PostNotFoundException("ID에 해당하는 게시글 없음");
     }
 
-    public void delPost(Long id) {
+    public void delPost(Long id) throws RuntimeException {
         Optional<PostEntity> findPost = postRepository.findById(id);
         if (findPost.isPresent()) {
             PostEntity target = findPost.get();
             postRepository.delete(target);
         } // 예외처리 필요
+        else {
+            throw new PostNotFoundException("ID에 해당하는 게시글 없음");
+        }
     }
 
-    public void likeCountPlus(Long id){
+    public void likeCountPlus(Long id) throws RuntimeException {
         Optional<PostEntity> findPost = postRepository.findById(id);
-        if(findPost.isPresent()) {
+        if (findPost.isPresent()) {
             PostEntity target = findPost.get();
             target.updateLikeCount(1);
             postRepository.save(target);
         } // 에외처리 필요
+        else {
+            throw new PostNotFoundException("ID에 해당하는 게시글 없음");
+        }
 
-   }
+    }
 
-    public void likeCountMinus(Long id){
+    public void likeCountMinus(Long id) throws RuntimeException{
         Optional<PostEntity> findPost = postRepository.findById(id);
-        if(findPost.isPresent()) {
+        if (findPost.isPresent()) {
             PostEntity target = findPost.get();
             target.updateLikeCount(-1);
             postRepository.save(target);
         } // 에외처리 필요
+        else {
+            throw new PostNotFoundException("ID에 해당하는 게시글 없음");
+        }
 
     }
 
-    public void hateCountPlus(Long id){
+    public void hateCountPlus(Long id) throws RuntimeException{
         Optional<PostEntity> findPost = postRepository.findById(id);
-        if(findPost.isPresent()) {
+        if (findPost.isPresent()) {
             PostEntity target = findPost.get();
             target.updateHateCount(1);
             postRepository.save(target);
         } // 에외처리 필요
+        else {
+            throw new PostNotFoundException("ID에 해당하는 게시글 없음");
+        }
 
     }
 
-    public void hateCountMinus(Long id){
+    public void hateCountMinus(Long id) throws RuntimeException{
         Optional<PostEntity> findPost = postRepository.findById(id);
-        if(findPost.isPresent()) {
+        if (findPost.isPresent()) {
             PostEntity target = findPost.get();
             target.updateHateCount(-1);
             postRepository.save(target);
         } // 에외처리 필요
-
+        else {
+            throw new PostNotFoundException("ID에 해당하는 게시글 없음");
+        }
     }
 
 
